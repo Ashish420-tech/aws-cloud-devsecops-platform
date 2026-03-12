@@ -35,6 +35,17 @@ jobs:
         run: |
            docker build -t devsecops-app ./app
 
+      # 🔐 DevSecOps Security Scan
+      - name: Run Trivy Vulnerability Scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: devsecops-app
+          format: table
+          exit-code: 0
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+
       - name: Tag Image
         run: |
           docker tag devsecops-app:latest \
