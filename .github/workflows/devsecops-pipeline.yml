@@ -1,0 +1,53 @@
+name: DevSecOps CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  AWS_REGION: ap-south-1
+  ECR_REPOSITORY: devsecops-app
+  EKS_CLUSTER: devsecops-cluster
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ap-south-1
+
+      - name: Login to ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build Docker Image
+        run: |
+          docker build -t devsecops-app .
+
+      - name: Tag Image
+        run: |
+          docker tag devsecops-app:latest \
+          ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-south-1.amazonaws.com/devsecops-app:latest
+
+      - name: Push Image
+        run: |
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-south-1.amazonaws.com/devsecops-app:latest
+
+      - name: Update kubeconfig
+        run: |
+          aws eks update-kubeconfig --name devsecops-cluster --region ap-south-1
+
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl apply -f k8s/
