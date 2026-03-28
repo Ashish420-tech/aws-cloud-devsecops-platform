@@ -1,0 +1,11 @@
+# Terraform files
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+
+# Terraform lock file (optional keep/remove based on team)
+.terraform.lock.hcl
+
+# OS files
+.DS_Store
