@@ -206,7 +206,87 @@ This project demonstrates practical experience with:
 • Production-ready Kubernetes environments
 
 ---
+-----
+# 🚀 Latest Update: AWS 3-Tier Architecture (Manual Deployment)
 
+## 📌 What I Built
+
+Designed and deployed a **production-like scalable 3-tier architecture on AWS** to gain hands-on experience with real-world infrastructure and networking.
+
+---
+
+## 🏗️ Architecture Components
+
+* **VPC** with public & private subnets
+* **Internet Gateway & NAT Gateway**
+* **EC2 Instances**
+
+  * Frontend (Public subnet)
+  * Backend (Private subnet)
+* **RDS MySQL Database** (Private subnet)
+* **Application Load Balancer (ALB)**
+* **Auto Scaling Group (ASG)**
+
+---
+
+## 🔐 Security Design
+
+* Backend instances are **not publicly accessible**
+* Database is fully isolated in **private subnet**
+* Only ALB is exposed to the internet
+* Access controlled via **Security Groups**
+
+---
+
+## ⚙️ Key Features Implemented
+
+* NAT Gateway for private subnet internet access
+* Backend communication using private IP
+* Spring Boot backend connected to RDS
+* ALB routing traffic to backend instances
+* Auto Scaling based on CPU utilization
+
+---
+
+## 🧪 Testing & Validation
+
+* Verified backend API via ALB endpoint
+* Inserted and retrieved data from RDS
+* Simulated CPU load to test Auto Scaling
+* Troubleshot real issues (NAT, routing, SSH, DB connectivity)
+
+---
+
+## 📸 Screenshots
+
+> Add screenshots:
+
+* ALB endpoint output
+* Auto Scaling instances
+* RDS connection
+* Architecture diagram (optional)
+
+---
+
+## 🎯 Outcome
+
+This phase helped me deeply understand:
+
+* AWS networking (VPC, routing, NAT)
+* Private vs public architecture design
+* Load balancing and scaling
+* Real-world debugging scenarios
+
+---
+
+## ⏭️ Next Step
+
+Moving this architecture to:
+
+➡️ Terraform (Infrastructure as Code)
+➡️ CI/CD automation
+➡️ Kubernetes deployment
+-----------------------------------------------------
 # 👨‍💻 Author
 
 Ashish Mondal
