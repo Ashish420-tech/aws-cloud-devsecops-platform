@@ -5,3 +5,8 @@ module "vpc" {
   public_subnets  = var.public_subnets
   private_subnets = var.private_subnets
 }
+module "security" {
+  source = "../../modules/security"
+
+  vpc_id = module.vpc.vpc_id
+}
