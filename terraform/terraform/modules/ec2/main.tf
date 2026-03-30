@@ -17,6 +17,17 @@ resource "aws_instance" "bastion" {
   vpc_security_group_ids = [var.bastion_sg_id]
   key_name               = var.key_name
 
+  iam_instance_profile = var.instance_profile_name
+
+  user_data = <<-EOF
+    #!/bin/bash
+    yum update -y
+    amazon-linux-extras install docker -y
+    systemctl start docker
+    systemctl enable docker
+    usermod -aG docker ec2-user
+  EOF
+
   associate_public_ip_address = true
 
   tags = {
@@ -30,10 +41,11 @@ resource "aws_instance" "private" {
   subnet_id              = var.private_subnet_id
   vpc_security_group_ids = [var.app_sg_id]
   key_name               = var.key_name
-
-  associate_public_ip_address = false
+iam_instance_profile = var.instance_profile_name
+  associate_public_ip_address = true
 
   tags = {
     Name = "private-instance"
   }
+
 }
