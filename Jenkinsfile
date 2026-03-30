@@ -22,25 +22,27 @@ pipeline {
         stage('Build') {
             steps {
                 echo "Running Maven Build..."
-              dir('app/demo-app') {
-           		 sh 'mvn clean install -Dmaven.test.skip=true'
+                dir('app/demo-app') {
+                    sh 'mvn clean install -Dmaven.test.skip=true'
                 }
             }
         }
-stage('SonarQube Scan') {
-    steps {
-        echo "Running SonarQube scan..."
-        dir('app/demo-app') {
-            withSonarQubeEnv('sonarqube') {
-                sh 'mvn sonar:sonar -Dsonar.projectKey=devsecops'
+
+        stage('SonarQube Scan') {
+            steps {
+                echo "Running SonarQube scan..."
+                dir('app/demo-app') {
+                    withSonarQubeEnv('sonarqube') {
+                        sh 'mvn sonar:sonar -Dsonar.projectKey=devsecops'
+                    }
+                }
             }
         }
-    }
-}
 
-
-stage('Quality Gate') {
-    steps {
-        echo "Skipping Quality Gate for now"
+        stage('Quality Gate') {
+            steps {
+                echo "Skipping Quality Gate for now"
+            }
+        }
     }
 }
