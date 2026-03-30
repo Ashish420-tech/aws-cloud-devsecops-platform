@@ -27,24 +27,19 @@ pipeline {
                 }
             }
         }
-
 stage('SonarQube Scan') {
     steps {
         echo "Running SonarQube scan..."
         dir('app/demo-app') {
             withSonarQubeEnv('sonarqube') {
-                sh '''
-                mvn sonar:sonar \
-                -Dsonar.projectKey=devsecops \
-                -Dsonar.host.url=$SONAR_HOST_URL \
-                -Dsonar.login=$SONAR_TOKEN
-                '''
+                sh 'mvn sonar:sonar -Dsonar.projectKey=devsecops'
             }
         }
     }
 }
 
-        stage('Quality Gate') {
+
+stage('Quality Gate') {
             steps {
                 timeout(time: 2, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
