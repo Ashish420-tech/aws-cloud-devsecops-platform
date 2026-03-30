@@ -22,23 +22,27 @@ pipeline {
         stage('Build') {
             steps {
                 echo "Running Maven Build..."
-                sh 'mvn clean install'
-            }
-        }
-
-        stage('SonarQube Scan') {
-            steps {
-                echo "Running SonarQube analysis..."
-                withSonarQubeEnv('sonarqube') {
-                    sh '''
-                    mvn sonar:sonar \
-                    -Dsonar.projectKey=devsecops \
-                    -Dsonar.host.url=$SONAR_HOST_URL \
-                    -Dsonar.login=$SONAR_TOKEN
-                    '''
+              dir('app/demo-app') {
+           		 sh 'mvn clean install'
                 }
             }
         }
+
+stage('SonarQube Scan') {
+    steps {
+        echo "Running SonarQube scan..."
+        dir('app/demo-app') {
+            withSonarQubeEnv('sonarqube') {
+                sh '''
+                mvn sonar:sonar \
+                -Dsonar.projectKey=devsecops \
+                -Dsonar.host.url=$SONAR_HOST_URL \
+                -Dsonar.login=$SONAR_TOKEN
+                '''
+            }
+        }
+    }
+}
 
         stage('Quality Gate') {
             steps {
