@@ -23,7 +23,7 @@ pipeline {
             steps {
                 echo "Running Maven Build..."
               dir('app/demo-app') {
-           		 sh 'mvn clean install -DskipTests'
+           		 sh 'mvn clean install -Dmaven.test.skip=true'
                 }
             }
         }
