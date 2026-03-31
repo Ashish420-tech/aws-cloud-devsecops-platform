@@ -21,7 +21,6 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo "Running Maven Build..."
                 dir('app/demo-app') {
                     sh 'mvn clean install -Dmaven.test.skip=true'
                 }
@@ -30,7 +29,6 @@ pipeline {
 
         stage('SonarQube Scan') {
             steps {
-                echo "Running SonarQube scan..."
                 dir('app/demo-app') {
                     withSonarQubeEnv('sonarqube') {
                         sh 'mvn sonar:sonar -Dsonar.projectKey=devsecops'
@@ -47,26 +45,34 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                echo "Building Docker Image..."
                 dir('app/demo-app') {
                     sh 'docker build -t demo-app .'
                 }
             }
         }
-    }
-}
-stage('ECR Login') {
-    steps {
-        echo "Logging into AWS ECR..."
-        withCredentials([usernamePassword(credentialsId: 'aws-creds', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-            sh '''
-                aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-                aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-                aws configure set region ap-south-1
 
-                aws ecr get-login-password --region ap-south-1 \
-                | docker login --username AWS --password-stdin 742820980479.dkr.ecr.ap-south-1.amazonaws.com
-            '''
+        stage('ECR Login') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'aws-creds', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                    sh '''
+                        aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+                        aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+                        aws configure set region ap-south-1
+
+                        aws ecr get-login-password --region ap-south-1 \
+                        | docker login --username AWS --password-stdin 742820980479.dkr.ecr.ap-south-1.amazonaws.com
+                    '''
+                }
+            }
+        }
+
+        stage('Push to ECR') {
+            steps {
+                sh '''
+                    docker tag demo-app:latest 742820980479.dkr.ecr.ap-south-1.amazonaws.com/demo-app:latest
+                    docker push 742820980479.dkr.ecr.ap-south-1.amazonaws.com/demo-app:latest
+                '''
+            }
         }
     }
 }
