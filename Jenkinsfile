@@ -117,3 +117,19 @@ pipeline {
         }
     }
 }
+stage('Deploy to EKS') {
+    steps {
+        script {
+            sh """
+                echo "Deploying to Kubernetes with image: ${IMAGE}"
+
+                aws eks --region ${AWS_REGION} update-kubeconfig --name devsecops-cluster
+
+                kubectl set image deployment/demo-app \
+                demo-app=${IMAGE}
+
+                kubectl rollout status deployment/demo-app
+            """
+        }
+    }
+}
