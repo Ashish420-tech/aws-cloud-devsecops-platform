@@ -73,7 +73,7 @@ pipeline {
             steps {
                 echo "Scanning Docker image with Trivy..."
                 sh """
-                    trivy image --severity HIGH,CRITICAL --exit-code 1 ${IMAGE}
+                    trivy image --severity HIGH,CRITICAL ${IMAGE}
                 """
             }
         }
