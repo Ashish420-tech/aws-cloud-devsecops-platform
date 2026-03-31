@@ -37,19 +37,28 @@ pipeline {
             }
         }
 
-stage('Quality Gate') {
-    steps {
-        timeout(time: 2, unit: 'MINUTES') {
-            waitForQualityGate abortPipeline: true
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 2, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
         }
-    }
-}
 
         stage('Docker Build') {
             steps {
                 dir('app/demo-app') {
                     sh 'docker build -t demo-app .'
                 }
+            }
+        }
+
+        stage('Trivy Scan') {
+            steps {
+                echo "Scanning Docker image with Trivy..."
+                sh '''
+                    trivy image --severity HIGH,CRITICAL --exit-code 1 demo-app:latest
+                '''
             }
         }
 
