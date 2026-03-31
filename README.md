@@ -415,6 +415,62 @@ Integrate with CI/CD pipeline
 GitHub → Jenkins → Sonar → Trivy → Docker → ECR → EC2 → Live App
                               ↓
                         Rollback System
+🚀 Latest Update (EKS Deployment & Full Automation)
+## 🚀 Latest Update (EKS Deployment Completed)
+
+### 🔥 End-to-End DevSecOps Pipeline Achieved
+
+This project now includes full CI/CD automation with Kubernetes (EKS) deployment.
+
+### 📌 Workflow
+
+Git Push → Jenkins Pipeline → Build → SonarQube Scan → Trivy Scan → Docker Build → Push to ECR → Deploy to EC2 → Deploy to EKS → Live Application
+
+---
+
+### ☸️ Kubernetes Deployment (EKS)
+
+- Created EKS Cluster (ap-south-1)
+- Node Group: m7i-flex.large
+- Configured kubectl access from Jenkins
+- Implemented rolling deployment using:
+  ```bash
+  kubectl set image deployment/demo-app demo-app=<image>
+🌐 Application Exposure
+Service Type: LoadBalancer
+Access via AWS ELB URL
+🔄 CI/CD Flow with EKS
+Jenkins automatically deploys latest image to EKS
+Zero downtime deployment using rolling updates
+
+Verified using:
+
+kubectl rollout status deployment/demo-app
+📊 Screenshots
+🔹 Jenkins Pipeline Success
+
+🔹 SonarQube Analysis
+
+🔹 Trivy Scan
+
+🔹 AWS ECR Images
+
+🔹 EKS Nodes
+
+🔹 EKS Pods
+
+🔹 LoadBalancer Service
+
+🔹 Application Output
+
+🏆 Key Achievements
+✅ End-to-End DevSecOps Pipeline
+✅ Security Integrated (SonarQube + Trivy)
+✅ Dockerized Application
+✅ AWS ECR Integration
+✅ Automated Deployment to EC2 & EKS
+✅ Kubernetes Rolling Updates
+✅ Publicly Accessible Application via LoadBalancer
 ## ⏭️ Next Step
 
 Moving this architecture to:
