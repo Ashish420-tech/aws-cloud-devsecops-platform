@@ -72,9 +72,7 @@ pipeline {
         stage('Trivy Scan') {
             steps {
                 echo "Scanning Docker image with Trivy..."
-                sh """
-                    trivy image --severity HIGH,CRITICAL ${IMAGE}
-                """
+                sh "trivy image --severity HIGH,CRITICAL ${IMAGE}"
             }
         }
 
@@ -115,21 +113,21 @@ pipeline {
                 }
             }
         }
-    }
-}
-stage('Deploy to EKS') {
-    steps {
-        script {
-            sh """
-                echo "Deploying to Kubernetes with image: ${IMAGE}"
 
-                aws eks --region ${AWS_REGION} update-kubeconfig --name devsecops-cluster
+        stage('Deploy to EKS') {
+            steps {
+                script {
+                    sh """
+                        echo "Deploying to Kubernetes with image: ${IMAGE}"
 
-                kubectl set image deployment/demo-app \
-                demo-app=${IMAGE}
+                        aws eks --region ${AWS_REGION} update-kubeconfig --name devsecops-cluster
 
-                kubectl rollout status deployment/demo-app
-            """
+                        kubectl set image deployment/demo-app demo-app=${IMAGE}
+
+                        kubectl rollout status deployment/demo-app
+                    """
+                }
+            }
         }
     }
 }
