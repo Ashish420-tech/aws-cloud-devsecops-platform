@@ -58,16 +58,6 @@ pipeline {
             }
         }
 
-    stage('Trivy Scan') {
-    steps {
-        echo "Scanning Docker image with Trivy..."
-        sh '''
-        export TRIVY_CACHE_DIR=/tmp/trivy
-        trivy image --severity HIGH,CRITICAL --exit-code 1 demo-app:latest
-        '''
-    }
-}
-
         stage('Trivy Scan') {
             steps {
                 echo "Scanning Docker image with Trivy..."
@@ -76,7 +66,6 @@ pipeline {
                 """
             }
         }
-
 
         stage('ECR Login') {
             steps {
