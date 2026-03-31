@@ -278,7 +278,199 @@ This phase helped me deeply understand:
 * Real-world debugging scenarios
 
 ---
+===================================================================================
+🚀 Latest Update: Full DevSecOps CI/CD + CD + Rollback (Last 3 Days)
+📌 What I Built
 
+Implemented a complete end-to-end DevSecOps pipeline on AWS EC2 using Jenkins, including:
+
+✔ CI (Build + Scan)
+✔ CD (Auto Deployment)
+✔ Security Gates (SonarQube + Trivy)
+✔ Docker + ECR integration
+✔ Versioning (build-based tagging)
+✔ 🔥 Rollback automation using Jenkins
+
+🧱 Updated Architecture Flow
+Developer 
+   ↓
+GitHub (Code Push)
+   ↓
+Jenkins Pipeline (CI/CD)
+   ↓
+Build (Maven)
+   ↓
+SonarQube (Code Quality & Security)
+   ↓
+Trivy (Container Vulnerability Scan)
+   ↓
+Docker Build (Versioned Image)
+   ↓
+Amazon ECR (Image Registry)
+   ↓
+EC2 Deployment (Docker Runtime)
+   ↓
+Live Application (Port 8081)
+🔁 Rollback Flow (Production Control)
+Jenkins Rollback Job
+   ↓
+Select IMAGE_TAG (build-XX)
+   ↓
+Pull from ECR
+   ↓
+Stop old container
+   ↓
+Deploy selected version
+   ↓
+Application restored instantly ✅
+⚙️ DevSecOps Pipeline Stages (Implemented)
+🔹 CI Pipeline
+Code Build → Maven
+Static Analysis → SonarQube
+Quality Gate Enforcement
+Docker Image Build
+Security Scan → Trivy
+🔹 CD Pipeline
+AWS ECR Login
+Push Versioned Image
+Auto Deployment on EC2
+Zero manual intervention
+🔹 Versioning Strategy
+demo-app:build-45
+demo-app:build-46
+demo-app:build-47
+
+✔ Replaces latest (bad practice)
+✔ Enables traceability
+✔ Enables rollback
+
+🔐 Security Implementation (Real DevSecOps)
+Code Security
+
+✔ SonarQube Quality Gate
+✔ Security Hotspot analysis
+
+Container Security
+
+✔ Trivy scan (HIGH + CRITICAL vulnerabilities)
+
+Pipeline Enforcement
+
+✔ Block deployment on security issues
+✔ Option to relax for learning
+
+🧪 Real Issues Solved (Hands-on Debugging)
+
+During implementation, solved real-world issues:
+
+Docker container exiting (non-web app issue)
+Port conflicts (8080 already in use)
+Jenkins Java version mismatch (Java 17 fix)
+Git merge conflicts in Jenkinsfile
+Duplicate pipeline stages
+ECR image not found (rollback issue)
+Trivy pipeline failure due to vulnerabilities
+SonarQube Quality Gate blocking pipeline
+🎯 Key DevOps Skills Demonstrated
+
+✔ CI/CD pipeline design
+✔ Docker container lifecycle
+✔ AWS ECR integration
+✔ Jenkins pipeline scripting (Groovy)
+✔ DevSecOps security integration
+✔ Debugging production-like failures
+✔ Versioned deployments
+✔ 🔥 Rollback strategy implementation
+
+📊 Final Deployment State
+docker ps
+
+✔ Running container:
+
+demo-app:build-47
+
+✔ Application accessible:
+
+http://<EC2-IP>:8081
+🔥 Production-Level Capabilities Achieved
+
+✔ Automated deployment pipeline
+✔ Secure code and container scanning
+✔ Version-controlled releases
+✔ Instant rollback capability
+✔ Zero downtime deployment model
+
+⏭️ Next Phase (In Progress)
+
+👉 Kubernetes Deployment (Amazon EKS)
+
+Planned:
+
+Deploy app to EKS
+Use Kubernetes Deployment & Service
+Implement scaling & self-healing
+Integrate with CI/CD pipeline
+🎨 OPTIONAL (ADD THIS FOR ATTRACTIVENESS)
+📌 Visual Flow (Simplified)
+GitHub → Jenkins → Sonar → Trivy → Docker → ECR → EC2 → Live App
+                              ↓
+                        Rollback System
+🚀 Latest Update (EKS Deployment & Full Automation)
+## 🚀 Latest Update (EKS Deployment Completed)
+
+### 🔥 End-to-End DevSecOps Pipeline Achieved
+
+This project now includes full CI/CD automation with Kubernetes (EKS) deployment.
+
+### 📌 Workflow
+
+Git Push → Jenkins Pipeline → Build → SonarQube Scan → Trivy Scan → Docker Build → Push to ECR → Deploy to EC2 → Deploy to EKS → Live Application
+
+---
+
+### ☸️ Kubernetes Deployment (EKS)
+
+- Created EKS Cluster (ap-south-1)
+- Node Group: m7i-flex.large
+- Configured kubectl access from Jenkins
+- Implemented rolling deployment using:
+  ```bash
+  kubectl set image deployment/demo-app demo-app=<image>
+🌐 Application Exposure
+Service Type: LoadBalancer
+Access via AWS ELB URL
+🔄 CI/CD Flow with EKS
+Jenkins automatically deploys latest image to EKS
+Zero downtime deployment using rolling updates
+
+Verified using:
+
+kubectl rollout status deployment/demo-app
+📊 Screenshots
+🔹 Jenkins Pipeline Success
+
+🔹 SonarQube Analysis
+
+🔹 Trivy Scan
+
+🔹 AWS ECR Images
+
+🔹 EKS Nodes
+
+🔹 EKS Pods
+
+🔹 LoadBalancer Service
+
+🔹 Application Output
+
+🏆 Key Achievements
+✅ End-to-End DevSecOps Pipeline
+✅ Security Integrated (SonarQube + Trivy)
+✅ Dockerized Application
+✅ AWS ECR Integration
+✅ Automated Deployment to EC2 & EKS
+✅ Kubernetes Rolling Updates
+✅ Publicly Accessible Application via LoadBalancer
 ## ⏭️ Next Step
 
 Moving this architecture to:

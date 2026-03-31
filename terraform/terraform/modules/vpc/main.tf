@@ -18,7 +18,7 @@ resource "aws_subnet" "public" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = element(var.public_subnets, count.index)
   map_public_ip_on_launch = true
-
+  availability_zone       = element(var.azs, count.index)
   tags = {
     Name = "public-subnet-${count.index}"
   }
@@ -28,7 +28,7 @@ resource "aws_subnet" "private" {
 
   vpc_id     = aws_vpc.main.id
   cidr_block = element(var.private_subnets, count.index)
-
+  availability_zone       = element(var.azs, count.index)
   tags = {
     Name = "private-subnet-${count.index}"
   }

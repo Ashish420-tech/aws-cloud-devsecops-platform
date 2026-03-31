@@ -4,6 +4,7 @@ module "vpc" {
   vpc_cidr        = var.vpc_cidr
   public_subnets  = var.public_subnets
   private_subnets = var.private_subnets
+  azs = ["ap-south-1a", "ap-south-1b"]
 }
 module "security" {
   source = "../../modules/security"
@@ -21,4 +22,16 @@ module "ec2" {
   app_sg_id     = module.security.app_sg_id
 
   key_name = "devsecops-key"
+
+instance_profile_name = module.iam.instance_profile_name
+}
+module "iam" {
+  source = "../../modules/iam"
+}
+module "eks" {
+  source = "../../modules/eks"
+
+  cluster_role_arn = module.iam.eks_cluster_role_arn
+  node_role_arn    = module.iam.eks_node_role_arn
+  subnet_ids       = module.vpc.public_subnets
 }
