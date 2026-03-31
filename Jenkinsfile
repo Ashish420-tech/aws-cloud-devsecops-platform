@@ -58,8 +58,7 @@ pipeline {
             }
         }
 
-<<<<<<< HEAD
-       stage('Trivy Scan') {
+    stage('Trivy Scan') {
     steps {
         echo "Scanning Docker image with Trivy..."
         sh '''
@@ -68,7 +67,7 @@ pipeline {
         '''
     }
 }
-=======
+
         stage('Trivy Scan') {
             steps {
                 echo "Scanning Docker image with Trivy..."
@@ -77,7 +76,7 @@ pipeline {
                 """
             }
         }
->>>>>>> 20a4bbb (Versioning of Jenkins)
+
 
         stage('ECR Login') {
             steps {
