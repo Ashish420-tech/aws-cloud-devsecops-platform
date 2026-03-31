@@ -27,7 +27,13 @@ pipeline {
         stage('Build') {
             steps {
                 dir('app/demo-app') {
-                    sh 'mvn clean install -Dmaven.test.skip=true'
+                    sh '''
+                    export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+                    export PATH=$JAVA_HOME/bin:$PATH
+
+                    java -version
+                    mvn clean install -Dmaven.test.skip=true
+                    '''
                 }
             }
         }
@@ -36,7 +42,12 @@ pipeline {
             steps {
                 dir('app/demo-app') {
                     withSonarQubeEnv('sonarqube') {
-                        sh 'mvn sonar:sonar -Dsonar.projectKey=devsecops'
+                        sh '''
+                        export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+                        export PATH=$JAVA_HOME/bin:$PATH
+
+                        mvn sonar:sonar -Dsonar.projectKey=devsecops
+                        '''
                     }
                 }
             }
@@ -84,9 +95,7 @@ pipeline {
 
         stage('Push to ECR') {
             steps {
-                sh """
-                    docker push ${IMAGE}
-                """
+                sh "docker push ${IMAGE}"
             }
         }
 
