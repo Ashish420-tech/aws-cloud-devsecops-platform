@@ -9,6 +9,11 @@ pipeline {
     environment {
         SONAR_HOST_URL = 'http://43.205.231.251:9000'
         SONAR_TOKEN = credentials('sonar-token')
+
+        AWS_REGION = 'ap-south-1'
+        ECR_REPO = '742820980479.dkr.ecr.ap-south-1.amazonaws.com/demo-app'
+        IMAGE_TAG = "build-${BUILD_NUMBER}"
+        IMAGE = "${ECR_REPO}:${IMAGE_TAG}"
     }
 
     stages {
@@ -48,11 +53,12 @@ pipeline {
         stage('Docker Build') {
             steps {
                 dir('app/demo-app') {
-                    sh 'docker build -t demo-app .'
+                    sh "docker build -t ${IMAGE} ."
                 }
             }
         }
 
+<<<<<<< HEAD
        stage('Trivy Scan') {
     steps {
         echo "Scanning Docker image with Trivy..."
@@ -62,28 +68,54 @@ pipeline {
         '''
     }
 }
+=======
+        stage('Trivy Scan') {
+            steps {
+                echo "Scanning Docker image with Trivy..."
+                sh """
+                    trivy image --severity HIGH,CRITICAL --exit-code 1 ${IMAGE}
+                """
+            }
+        }
+>>>>>>> 20a4bbb (Versioning of Jenkins)
 
         stage('ECR Login') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'aws-creds', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-                    sh '''
+                    sh """
                         aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
                         aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-                        aws configure set region ap-south-1
+                        aws configure set region ${AWS_REGION}
 
-                        aws ecr get-login-password --region ap-south-1 \
+                        aws ecr get-login-password --region ${AWS_REGION} \
                         | docker login --username AWS --password-stdin 742820980479.dkr.ecr.ap-south-1.amazonaws.com
-                    '''
+                    """
                 }
             }
         }
 
         stage('Push to ECR') {
             steps {
-                sh '''
-                    docker tag demo-app:latest 742820980479.dkr.ecr.ap-south-1.amazonaws.com/demo-app:latest
-                    docker push 742820980479.dkr.ecr.ap-south-1.amazonaws.com/demo-app:latest
-                '''
+                sh """
+                    docker push ${IMAGE}
+                """
+            }
+        }
+
+        stage('Deploy to EC2') {
+            steps {
+                script {
+                    sh """
+                        echo "Deploying version: ${IMAGE_TAG}"
+
+                        docker pull ${IMAGE}
+
+                        docker stop demo-app || true
+                        docker rm demo-app || true
+
+                        docker run -d -p 8081:8080 --name demo-app ${IMAGE}
+                    """
+                }
             }
         }
     }
