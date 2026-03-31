@@ -44,5 +44,15 @@ pipeline {
                 echo "Skipping Quality Gate for now"
             }
         }
+
+        // 🔥 NEW STAGE (ONLY ADDITION)
+        stage('Docker Build') {
+            steps {
+                echo "Building Docker Image..."
+                dir('app/demo-app') {
+                    sh 'docker build -t demo-app .'
+                }
+            }
+        }
     }
 }

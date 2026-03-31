@@ -27,6 +27,8 @@
 
   <build>
     <plugins>
+
+      <!-- Compiler Plugin -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -36,6 +38,21 @@
           <target>17</target>
         </configuration>
       </plugin>
+
+      <!-- 🔥 ADD THIS (Executable JAR Fix) -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.2.2</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>com.devsecops.App</mainClass> <!-- CHANGE IF NEEDED -->
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+
     </plugins>
   </build>
 
