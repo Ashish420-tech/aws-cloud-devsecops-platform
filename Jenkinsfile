@@ -7,9 +7,11 @@ pipeline {
     }
 
     environment {
-    SONAR_HOST_URL = 'http://43.205.231.251:9000'
-    SONAR_TOKEN = credentials('sonar-token')
-}
+        SONAR_HOST_URL = 'http://43.205.231.251:9000'
+        SONAR_TOKEN = credentials('sonar-token')
+    }
+
+    stages {
 
         stage('Checkout') {
             steps {
@@ -43,7 +45,6 @@ pipeline {
             }
         }
 
-        // 🔥 NEW STAGE (ONLY ADDITION)
         stage('Docker Build') {
             steps {
                 echo "Building Docker Image..."
