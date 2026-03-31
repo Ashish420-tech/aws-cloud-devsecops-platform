@@ -7,11 +7,9 @@ pipeline {
     }
 
     environment {
-        SONAR_HOST_URL = 'http://<your-ec2-ip>:9000'
-        SONAR_TOKEN = credentials('sonar-token')
-    }
-
-    stages {
+    SONAR_HOST_URL = 'http://43.205.231.251:9000'
+    SONAR_TOKEN = credentials('sonar-token')
+}
 
         stage('Checkout') {
             steps {
